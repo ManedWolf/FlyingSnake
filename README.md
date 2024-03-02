@@ -15,7 +15,7 @@ Résouds une ou plusieurs formules arithmétiques contenant des nombres (entier 
 ### Variables Commands
 
 `/set <variable> <optionel:valeur>`
-Créer ou modifie une variable (une variable est un champ de texte qui pourra ensuite être interprété différeme.nt selon le contexte d'utilisation selon qu'il représente un nombre, une formule ou du texte) (alias: `/s /fss /fsset`)
+Créer ou modifie une variable (une variable est un champ de texte qui pourra ensuite être interprété différement selon le contexte d'utilisation selon qu'il représente un nombre, une formule ou du texte) (alias: `/s /fss /fsset`).
 
 `/get <optionel:variable>`
 Affiche la valeur d'une variable. Si aucune variable renseignée, affiche le nom de toutes les variables stockées (alias: `/g /fsg /fsget`). `/GET <optionel:variable>` Affiche l'historique des valeurs d'une variable. Si aucune variable n'est renseignée, affiche le nom de toutes les variables stockées (alias: `/G /FSG /FSGET`). `/getall` pour afficher la valeur de toutes les variables (alias: `/ga /fsga /fsgetall`). `/GETALL` pour  l'historique des valeurs de toutes les variables (alias: `/GA /FSGA /FSGETALL`).
