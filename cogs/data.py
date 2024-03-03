@@ -9,6 +9,11 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
+# COG SETUP
+
+async def setup(bot):
+  await bot.add_cog(Data(bot))
+
 # COG
 
 class Data(commands.Cog):
@@ -16,12 +21,20 @@ class Data(commands.Cog):
   # INITIALIZATION
 
   def __init__(self, bot):
+
     self.bot = bot
-    self.ctxmenu_delete_all = app_commands.ContextMenu(
-      name = 'Delete My Variables',
-      callback = self.delete_all,
+
+    self.ctxmenu_get_data = app_commands.ContextMenu(
+      name = 'Get My Data',
+      callback = self.get_data,
     )
-    self.bot.tree.add_command(self.ctxmenu_delete_all)
+    self.bot.tree.add_command(self.ctxmenu_get_data)
+
+    self.ctxmenu_delete_data = app_commands.ContextMenu(
+      name = 'Delete My Data',
+      callback = self.delete_data,
+    )
+    self.bot.tree.add_command(self.ctxmenu_delete_data)
 
   @commands.Cog.listener()
   async def on_ready(self):
@@ -33,7 +46,7 @@ class Data(commands.Cog):
     syncing = await ctx.bot.tree.sync()
     logging.info(f'{self.__class__.__name__}: {len(syncing)} command(s) loaded')
     await ctx.send(f'{self.__class__.__name__}: {len(syncing)} command(s) loaded')
-  
+
 
   #@app_commands.command(description = "Create or modify a variable.")
   #async def variables(self, interaction, variable:str, value:str):
@@ -43,22 +56,18 @@ class Data(commands.Cog):
 
 
           
+  # GETTING DATA
 
-
-
-
-
-
-
-
-
-  
+  async def get_data(self, interaction:discord.Interaction, user:discord.User):
+    await interaction.response.send_message(file=discord.File(fp=f"data/{interaction.user.id}.json"), ephemeral=True)
 
   # SETTING VARIABLES
 
-  @app_commands.command(description = "Create or modify a variable.")
+  @app_commands.command()
   async def set(self, interaction, variable:str, value:str):
     # NEED TO FORCE VARIABLE NAMES TO BE AZa-z_
+
+    """Create or modify a variable."""
 
     """ /set <variable> [value] (alias: /s /fss /fsset)
     Create or modify a variable while keeping a history of modifications.
@@ -105,11 +114,9 @@ class Data(commands.Cog):
 
   # DELETING ALL VARIABLES
 
-  async def delete_all(self, interaction:discord.Interaction, message:discord.Message):
+  async def delete_data(self, interaction:discord.Interaction, message:discord.Message):
 
-    """
-    Delete all your variables.
-    """
+    """Delete all your variables."""
 
     try:
       with open(f"data/{str(interaction.user.id)}.json", 'r+') as file:
@@ -134,11 +141,3 @@ class Data(commands.Cog):
     except Exception as exception:
       logging.exception(f"Data.delete_all(): {exception}")
       await interaction.response.send_message(f"Unknown exception: {exception}", ephemeral=True)
-
-
-
-
-
-
-async def setup(bot):
-  await bot.add_cog(Data(bot))
