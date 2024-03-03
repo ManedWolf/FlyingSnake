@@ -1,4 +1,5 @@
 token
+cogs/__pycache__/
 data/*
 logs/*
 crap/

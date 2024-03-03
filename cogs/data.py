@@ -39,16 +39,9 @@ class Data(commands.Cog):
   #async def variables(self, interaction, variable:str, value:str):
   # Choice pour les variables ?
 
+  #GetMyData récupère son fichier de variables ?
 
-  @app_commands.command()
-  async def roll(self, interaction, expression:str=""):
 
-    """Evaluate arithmetic expressions involving dice."""
-
-    if not expression:
-      try:
-        with open(f"data/{interaction.user.id}.json", 'r+') as file:
-          variables = json.load(file)
           
 
 
@@ -65,6 +58,7 @@ class Data(commands.Cog):
 
   @app_commands.command(description = "Create or modify a variable.")
   async def set(self, interaction, variable:str, value:str):
+    # NEED TO FORCE VARIABLE NAMES TO BE AZa-z_
 
     """ /set <variable> [value] (alias: /s /fss /fsset)
     Create or modify a variable while keeping a history of modifications.
@@ -73,7 +67,7 @@ class Data(commands.Cog):
     """
 
     if not variable:
-      logging.error("variables.set(): variable name missing")
+      logging.error("Data.set(): variable name missing")
       await interaction.response.send_message("error: variable name missing", delete_after=5, ephemeral=True)
       return
 
@@ -86,12 +80,12 @@ class Data(commands.Cog):
           dump[variable]['version'] += 1
 
     except FileNotFoundError:
-      logging.info("variables.set(): file missing")
+      logging.info("Data.set(): file missing")
       with open("data/"+str(interaction.user.id)+'.json', 'w+') as file:
         json.dump({variable:{"version":0,"history":[{"value":value,"date":int(time.time())}]}}, file, indent=2)
 
     except json.JSONDecodeError:
-      logging.error("variables.set(): invalid JSON")
+      logging.error("Data.set(): invalid JSON")
       flush(interaction.user.id)
       with open("data/"+str(interaction.user.id)+'.json', 'w+') as file:
         file.truncate()
@@ -104,7 +98,7 @@ class Data(commands.Cog):
         json.dump(dump, file, indent=2)
 
     except Exception as exception:
-      logging.exception("variables.set(): "+exception)
+      logging.exception("Data.set(): "+exception)
       await interaction.response.send_message("error: unknown exception", ephemeral=True)
 
     await interaction.response.send_message(f"olala", ephemeral=True, delete_after=5)
